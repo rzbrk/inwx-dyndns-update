@@ -35,7 +35,6 @@ fi
 
 # Get public IP Address
 ipv4=$(curl -s "$v4_get_url")
-ipv4=""
 ipv6=$(curl -s "$v6_get_url")
 
 # Get current hostname IP address

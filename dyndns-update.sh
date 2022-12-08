@@ -1,8 +1,35 @@
 #!/bin/bash
 
+date
+
 ## Read the configuration
 
-source ./dyndns-update.conf
+if [ "$1" != "" ] && [ -r $1 ];
+then
+        conf=$1
+else
+        # Possible (ordered) location for configuration files
+        conf_check=(./dyndns-update.conf ~/.config/dyndns-update/dyndns-update.conf /usr/local/etc/dyndns-update/dyndns-update.conf /etc/dyndns-update/dyndns-update.conf)
+
+        # If no config file is provided look for config files in the system and
+        # pick the first one found:
+        for c in "${conf_check[@]}"; do
+                if [ -r $c ];
+                then
+                        conf=$c
+                        break
+                fi
+        done
+fi
+
+if [ "$conf" != "" ];
+then
+	source $conf
+	echo " Config: $conf"
+else
+	echo "No conf file provided/found. Exiting"
+	exit 1
+fi
 
 ## Start Bash Script
 
@@ -14,7 +41,6 @@ ipv6=$(curl -s "$v6_get_url")
 host_ipv4=$(dig @$test_dns_server +short -t a $hostname | head -n 1)
 host_ipv6=$(dig @$test_dns_server +short -t aaaa $hostname | head -n 1)
 
-date
 echo " Current public IPv4: $ipv4"
 echo " Current DNS IPv4:    $host_ipv4"
 if [ $enable_ipv6 = true -a -n "$ipv6" ]; then

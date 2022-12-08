@@ -35,6 +35,7 @@ fi
 
 # Get public IP Address
 ipv4=$(curl -s "$v4_get_url")
+ipv4=""
 ipv6=$(curl -s "$v6_get_url")
 
 # Get current hostname IP address
@@ -56,7 +57,7 @@ if [ $enable_ipv6 = true -a -n "$ipv6" ]; then
     echo ")"
   fi
 else
-  if [ "$host_ipv4" != "$ipv4" ]; then
+  if [ "$host_ipv4" != "$ipv4" -a -n "$ipv4" ]; then
     echo -n " Updating IPv4 only ... ("
     curl --user $username:$password "${dyndns_update_url}myip=${ipv4}"
     echo ")"

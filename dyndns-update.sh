@@ -27,7 +27,7 @@ then
 	source $conf
 	echo " Config: $conf"
 else
-	echo "No conf file provided/found. Exiting"
+	echo " Error: No conf file provided/found. Exiting"
 	exit 1
 fi
 
